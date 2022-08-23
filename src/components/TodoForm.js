@@ -1,12 +1,44 @@
-function TodoForm() {
+import axios from 'axios';
+import { useState } from 'react';
+
+function TodoForm(props) {
+  const [title, setTitle] = useState('');
+
+  const handleSubmitForm = async (e) => {
+    e.preventDefault();// Prevent Submit ของ Form
+    // validate first
+
+    // success validation
+    try {
+      const res = await axios.post('http://localhost:8080/todos', {
+        title,
+        completed: false,
+      });
+      props.fetchTodos()
+      setTitle('')
+      console.log(res.data)
+    } catch(err){
+      console.log(err)
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmitForm}>
       <div className='input-group'>
-        <input type='text' className='form-control' />
+        <input
+          type='text'
+          className='form-control'
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
         <button className='btn btn-primary'>
           <i className='fa-solid fa-check' />
         </button>
-        <button className='btn btn-outline-secondary'>
+        <button
+          type='button'
+          className='btn btn-outline-secondary'
+          onClick={() => setTitle('')}
+        >
           <i className='fa-solid fa-xmark' />
         </button>
       </div>
@@ -14,4 +46,4 @@ function TodoForm() {
     </form>
   );
 }
-export default TodoForm
+export default TodoForm;
