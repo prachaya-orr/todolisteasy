@@ -31,10 +31,22 @@ function App() {
     fetchTodos();
   }, []);
 
+  const handleSubmitCreate = async title =>{
+ try {
+      const res = await axios.post('http://localhost:8080/todos', {
+        title,
+        completed: false,
+      });
+      fetchTodos()
+      console.log(res.data)
+    } catch(err){
+      console.log(err)
+    }
+  }
   return (
     <div className='container mt-5 mb-3' style={{ maxWidth: 576 }}>
       <div className='my-4'>
-        <TodoForm fetchTodos={fetchTodos}  />
+        <TodoForm onSubmit={handleSubmitCreate} />
       </div>
       <TodoContainer todos={todos} fetchTodos={fetchTodos} />
     </div>
